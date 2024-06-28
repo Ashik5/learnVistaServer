@@ -12,5 +12,7 @@ app.use(express.json());
 
 app.listen(PORT, () => {
     connectToMongoDB();
-    console.log("Server is running on PORT", PORT);
+    app.get("/", (req, res) => {
+        res.send("Hello World");
+    });
 })
