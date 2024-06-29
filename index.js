@@ -27,7 +27,7 @@ app.listen(PORT, () => {
 })
 
 app.get("/", (req, res) => {    
-    res.send
+    res.send("Hello World");
 }
 );
 app.use("/books", bookRoute);
