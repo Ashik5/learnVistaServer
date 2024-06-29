@@ -25,9 +25,15 @@ app.use(cors(
     }
 ));
 app.get("/", async (req, res) => {    
-    await Book.find(
-        {},
-    ).then((books) => { res.json(books) }).catch((err) => { res.status(400).json("Error: " + err) });
+    try{
+        await Book.find(
+            {},
+        ).then((books) => { res.json(books) });
+    }
+    catch(err){
+        res.status(500).send(err);
+    }
+
 }
 );
 app.use("/books", bookRoute);
