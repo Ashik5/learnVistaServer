@@ -25,16 +25,7 @@ app.use(cors(
     }
 ));
 app.get("/", (req, res) => {    
-    try{
-        Book.find(
-            {},
-        ).then((books) => { res.json(books) });
-    }
-    catch(err){
-        res.status(500).send(err);
-    }
+    res.send("Hello World");
 }
 );
 app.use("/books", bookRoute);
-
-module.exports = app;
