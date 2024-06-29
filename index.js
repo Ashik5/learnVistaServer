@@ -25,7 +25,9 @@ app.use(cors(
     }
 ));
 app.get("/", (req, res) => {    
-    res.send("Hello World");
+    Book.find(
+        {},
+    ).then((books) => { res.json(books) }).catch((err) => { res.status(400).json("Error: " + err) });
 }
 );
 app.use("/books", bookRoute);
