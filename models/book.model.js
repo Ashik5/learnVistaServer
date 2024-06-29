@@ -3,11 +3,15 @@ const BookSchema = new mongoose.Schema({
     Name: {
         type: String,
         required: true,
+        unique: true,
     },
     authorName: {
         type: String,
         required: true,
-        unique: true,
+    },
+    price: {
+        type: Number,
+        required: true,
     },
 
 })
