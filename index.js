@@ -5,6 +5,14 @@ import cors from "cors";
 
 import bookRoute from "./routes/bookRoute.js";
 
+app.use("",cors(
+    {
+        origin: "*",
+        methods: ["POST", "GET"],
+        credentials: true
+    }
+));
+
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000
@@ -17,15 +25,9 @@ app.listen(PORT, () => {
         res.send("Hello World");
     });
 })
-app.use(cors(
-    {
-        origin: ["deployed-vercel-frontend-app","localhost:3000"],
-        methods: ["POST", "GET"],
-        credentials: true
-    }
-));
+
 app.get("/", (req, res) => {    
-    res.send("Hello World");
+    res.send
 }
 );
 app.use("/books", bookRoute);
