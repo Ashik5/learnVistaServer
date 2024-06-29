@@ -24,8 +24,8 @@ app.use(cors(
         credentials: true
     }
 ));
-app.get("/", (req, res) => {    
-    Book.find(
+app.get("/", async (req, res) => {    
+    await Book.find(
         {},
     ).then((books) => { res.json(books) }).catch((err) => { res.status(400).json("Error: " + err) });
 }
