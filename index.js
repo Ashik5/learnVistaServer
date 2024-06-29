@@ -24,16 +24,17 @@ app.use(cors(
         credentials: true
     }
 ));
-app.get("/", async (req, res) => {    
+app.get("/", (req, res) => {    
     try{
-        await Book.find(
+        Book.find(
             {},
         ).then((books) => { res.json(books) });
     }
     catch(err){
         res.status(500).send(err);
     }
-
 }
 );
 app.use("/books", bookRoute);
+
+export default app;
