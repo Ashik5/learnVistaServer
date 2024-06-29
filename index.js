@@ -1,9 +1,9 @@
 import express from "express"
 import dotenv from "dotenv"
 import connectToMongoDB from "./db/connectToMongoDB.js";
-import Book from './models/book.model.js';
 import cors from "cors";
 
+import bookRoute from "./routes/bookRoute.js";
 
 dotenv.config();
 const app = express();
@@ -24,7 +24,4 @@ app.use(cors(
         credentials: true
     }
 ));
-
-app.get("/", (req, res) => {
-  res.json("Hello");
-})
+app.use("/books", bookRoute);
