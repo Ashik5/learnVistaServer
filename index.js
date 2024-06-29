@@ -7,7 +7,7 @@ import bookRoute from "./routes/bookRoute.js";
 
 app.use("",cors(
     {
-        origin: "https://learn-vista-server.vercel.app/",
+        origin: "*",
         methods: ["POST", "GET"],
         credentials: true
     }
