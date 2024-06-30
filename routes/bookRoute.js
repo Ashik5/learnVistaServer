@@ -4,18 +4,26 @@ import Book from '../models/book.model.js';
 
 router.get("/", (req, res) => {
     const Name = req.query.name;
-    if(Name){
+    if (Name && Name !== "") {
         const rex = new RegExp(Name.toString(), 'i');
         Book.find(
-            {"Name": rex},
-        ).then((books) => { res.json(books) }).catch((err) => { res.status(400).json("Error: " + err) });
+            {
+                $or: [
+                    { "Name": rex },
+                    { "authorName": rex }
+                ]
+            }).then((books) => {
+                res.json(books)
+            }).catch((err) => {
+                res.status(400).json("Error: " + err)
+            });
         return;
     }
-    else{
-    Book.find(
-        {},
-    ).then((books) => { res.json(books) }).catch((err) => { res.status(400).json("Error: " + err) });
-}
+    else {
+        Book.find(
+            {},
+        ).then((books) => { res.json(books) }).catch((err) => { res.status(400).json("Error: " + err) });
+    }
 });
 
 router.post("/", (req, res) => {
