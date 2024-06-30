@@ -7,7 +7,7 @@ router.get("/", (req, res) => {
         {},
     ).then((books) => { res.json(books) }).catch((err) => { res.status(400).json("Error: " + err) });
 });
-router.get("/", (req, res) => {
+router.put("/", (req, res) => {
     const book = new Book({
         Name: req.body.Name,
         authorName: req.body.authorName,
