@@ -7,5 +7,13 @@ router.get("/", (req, res) => {
         {},
     ).then((books) => { res.json(books) }).catch((err) => { res.status(400).json("Error: " + err) });
 });
+router.put("/", (req, res) => {
+    const book = new Book({
+        Name: req.body.Name,
+        authorName: req.body.authorName,
+        price: req.body.price,
+    });
+    book.save().then(() => { res.json("Book added") }).catch((err) => { res.status(400).json("Error: " + err) });
+});
 
 export default router;
