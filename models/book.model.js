@@ -13,7 +13,9 @@ const BookSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-
+    imageUrl: {
+        type: String,
+    },
 })
 
 const Book = mongoose.model("Book", BookSchema);
