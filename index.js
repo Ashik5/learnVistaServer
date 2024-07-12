@@ -11,7 +11,7 @@ import bookRoute from "./routes/bookRoute.js";
 const app = express();
 app.use("",cors(
     {
-        origin: "https://learnvista.vercel.app",
+        origin: "http://localhost:3000",
         credentials: true,
     }
 ));

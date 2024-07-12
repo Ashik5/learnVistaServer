@@ -25,7 +25,7 @@ export const getBook = (req, res) => {
 
 export const addBook = (req, res) => {
     try {
-        const image = req.file ? `uploads/${req.file.filename}` : null;
+        const image = req.file ? `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}` : null;
         const book = new Book({
             Name: req.body.Name,
             authorName: req.body.authorName,
