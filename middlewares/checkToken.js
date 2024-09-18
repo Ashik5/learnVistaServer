@@ -1,22 +1,27 @@
 import jwt from "jsonwebtoken";
 
 const checkToken = (req, res, next) => {
-  const { token } = req.cookies;
+  // Adjust token name if necessary
+  const { accessToken } = req.cookies;
 
-  if (!token) {
-    return res.status(401).json({ error: "Invalid token" });
+  if (!accessToken) {
+    return res.status(401).json({ error: "Access token is missing" });
   }
 
-  jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+  jwt.verify(accessToken, process.env.JWT_SECRET, (err, user) => {
     if (err) {
-      res.clearCookie("token", {
+      // Clear cookie if token is invalid
+      res.clearCookie("accessToken", {
         httpOnly: true,
         secure: true,
         sameSite: "none",
         path: "/",
       });
-      return res.status(401).json({ error: "Invalid token" });
+      return res.status(401).json({ error: "Invalid access token" });
     }
+
+    // Attach user to request if token is valid
+    req.user = user;
     next();
   });
 };
