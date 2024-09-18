@@ -3,6 +3,61 @@ import User from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 import Book from "../models/book.model.js";
 
+// Helper functions for generating tokens
+const accessTokenLifetime = "15m";
+const refreshTokenLifetime = "7d";
+
+// Generate Access Token
+const generateAccessToken = (user) => {
+  return jwt.sign(
+    {
+      id: user.id,
+      username: user.username,
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: accessTokenLifetime }
+  );
+};
+
+// Generate Refresh Token
+const generateRefreshToken = (user) => {
+  return jwt.sign(
+    {
+      id: user.id,
+      username: user.username,
+    },
+    process.env.JWT_REFRESH_SECRET,
+    { expiresIn: refreshTokenLifetime }
+  );
+};
+
+// Endpoint to refresh the access token using a valid refresh token
+export const refreshAccessToken = async (req, res) => {
+  const { refreshToken } = req.cookies;
+  
+  if (!refreshToken) {
+    return res.status(401).json({ error: "Refresh token is missing" });
+  }
+
+  try {
+    // Verify the refresh token
+    const user = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+    const newAccessToken = generateAccessToken(user);
+    res.cookie("accessToken", newAccessToken, {
+      maxAge: 15 * 60 * 1000, // 15 minutes
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      path: "/",
+    });
+
+    return res.status(200).json({ message: "Access token refreshed successfully" });
+  } catch (err) {
+    console.log(err);
+    return res.status(403).json({ error: "Invalid refresh token", err });
+  }
+};
+
 export const getAllUsers = async (req, res) => {
   try {
     const allUsers = await User.find().select(["-password", "-__v"]);
@@ -14,8 +69,8 @@ export const getAllUsers = async (req, res) => {
 
 export const getProfile = async (req, res) => {
   try {
-    const { token } = req.cookies;
-    const user = jwt.verify(token, process.env.JWT_SECRET);
+    const { accessToken } = req.cookies;
+    const user = jwt.verify(accessToken, process.env.JWT_SECRET);
     const userInfo = await User.findById(user.id);
     return res.status(200).json(userInfo);
   } catch (err) {
@@ -93,15 +148,16 @@ export const deleteAllUsers = async (req, res) => {
     return res.status(400).json(err);
   }
 };
+
 export const addBook = async (req, res) => {
   try {
-    const { token } = req.cookies;
+    const { accessToken } = req.cookies;
 
-    if (!token) {
+    if (!accessToken) {
       return res.status(401).json({ error: "Token is missing" });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
     const userId = decoded.id;
 
     const { bookId } = req.body;
