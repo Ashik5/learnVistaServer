@@ -173,7 +173,7 @@ export const addBook = async (req, res) => {
     }
 
     if (user.books.includes(bookId)) {
-      return res.status(400).json({ error: "Book bought" });
+      return res.status(400).json({ error: "Book already in user's cart" });
     }
 
     user.books.push(bookId);
@@ -182,42 +182,5 @@ export const addBook = async (req, res) => {
     return res.status(200).json({ message: "Book added to user's cart successfully", books: user.books });
   } catch (err) {
     return res.status(400).json({ error: err.message });
-  }
-};
-
-// Route to add a book to the user's cart
-export const addToCart =  async (req, res) => {
-  try {
-    const { accessToken } = req.cookies;
-    if (!accessToken) {
-      return res.status(401).json({ error: "Token is missing" });
-    }
-
-    const decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
-    const userId = decoded.id;
-
-    const { bookId } = req.body;
-    // Find the user
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    // Find the book
-    const book = await Book.findById(bookId);
-    if (!book) {
-      return res.status(404).json({ message: 'Book not found' });
-    }
-
-    // Add book to cart if it's not already in there
-    if (!user.cart.includes(bookId)) {
-      user.cart.push(bookId);
-      await user.save();
-      return res.status(200).json({ message: 'Book added to cart', cart: user.cart });
-    } else {
-      return res.status(400).json({ message: 'Book already in cart' });
-    }
-  } catch (error) {
-    return res.status(500).json({ message: 'Server error', error });
   }
 };
