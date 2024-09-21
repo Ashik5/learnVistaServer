@@ -11,12 +11,9 @@ dotenv.config();
 
 const app = express();
 app.use(cors({
-    origin: process.env.CLIENT_URL,  // Allow requests from your frontend
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],  // Include OPTIONS method
-    credentials: true,  // Allow cookies to be sent
-    allowedHeaders: ['Content-Type', 'Authorization'],  // Explicitly allow headers if needed
+    origin: process.env.CLIENT_URL,
+    credentials: true,
 }));
-
 const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
