@@ -1,12 +1,25 @@
 {
-    "version":2,
-    "builds": [
-      { "src": "*.js", "use": "@vercel/node" }
-    ],
-    "routes": [
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
         {
-          "src": "/(.*)",
-          "dest": "/"
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://learnvista.vercel.app"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, POST, PUT, DELETE, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "X-Requested-With, content-type, Authorization"
+        },
+        {
+          "key": "Access-Control-Allow-Credentials",
+          "value": "true"
         }
-    ]
-  }
+      ]
+    }
+  ]
+}
