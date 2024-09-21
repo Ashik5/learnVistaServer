@@ -6,6 +6,7 @@ import userRoutes from "./routes/users.js";
 import authRouter from "./routes/auth.js";
 import cookieParser from 'cookie-parser';
 import bookRoute from "./routes/bookRoute.js";
+import path from 'path';
 
 dotenv.config();
 
@@ -22,7 +23,7 @@ app.use(cookieParser());
 app.get("/", (req, res) => {
     res.send(`Client URL: ${process.env.CLIENT_URL}`);
 });
-
+app.use('/uploads', express.static(path.join(path.resolve(), 'uploads')));
 app.use("/users", userRoutes);
 app.use("/auth", authRouter);
 app.use("/books", bookRoute);
