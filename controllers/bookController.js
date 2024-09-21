@@ -30,7 +30,8 @@ export const addBook = (req, res) => {
             Name: req.body.Name,
             authorName: req.body.authorName,
             price: req.body.price,
-            imageUrl: image
+            imageUrl: image,
+            genere: req.body.genere,
         });
         book.save().then(() => { res.status(201).json("Book added") });
     } catch (error) {

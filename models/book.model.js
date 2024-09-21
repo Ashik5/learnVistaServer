@@ -16,6 +16,9 @@ const BookSchema = new mongoose.Schema({
     imageUrl: {
         type: String,
     },
+    genere: {
+        type: String,
+    },
 })
 
 const Book = mongoose.model("Book", BookSchema);
