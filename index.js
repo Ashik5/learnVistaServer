@@ -10,13 +10,26 @@ import bookRoute from "./routes/bookRoute.js";
 dotenv.config();
 
 const app = express();
-app.use(cors({
-    origin: process.env.CLIENT_URL,  // Allow requests from your frontend
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],  // Include OPTIONS method
-    credentials: true,  // Allow cookies to be sent
-    allowedHeaders: ['Content-Type', 'Authorization'],  // Explicitly allow headers if needed
-}));
-
+const allowedOrigins = [
+    'http://localhost:3000', // Development frontend
+    'https://learnvista.vercel.app', // Production frontend
+  ];
+  
+  const corsOptions = {
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  };
+  
+  app.use(cors(corsOptions));
 const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
