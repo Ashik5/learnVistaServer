@@ -1,13 +1,12 @@
 {
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
+    "version":2,
+    "builds": [
+      { "src": "*.js", "use": "@vercel/node" }
+    ],
+    "routes": [
         {
-          "key": "Access-Control-Allow-Origin",
-          "value": "https://learnvista.vercel.app"
+          "src": "/(.*)",
+          "dest": "/"
         }
-      ]
-    }
-  ]
-}
+    ]
+  }

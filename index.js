@@ -11,10 +11,13 @@ import bookRoute from "./routes/bookRoute.js";
 dotenv.config();
 
 const app = express();
-app.use(cors({
-    origin: process.env.CLIENT_URL,
-    credentials: true,
-}));
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', process.env.CLIENT_URL);  // Specific domain
+    res.header('Access-Control-Allow-Credentials', 'true');  // Credentials are allowed
+    res.header('Access-Control-Allow-Methods', 'GET,POST');  // Allowed methods
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');  // Allowed headers
+    next();
+  });  
 
 const PORT = process.env.PORT || 5000;
 
