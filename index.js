@@ -21,8 +21,6 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 app.use(cookieParser());
 
-app.use('/uploads', express.static(path.join(path.resolve(), 'uploads')));
-
 app.get("/", (req, res) => {
     res.send(`Client URL: ${process.env.CLIENT_URL}`);
 });

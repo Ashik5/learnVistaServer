@@ -2,6 +2,7 @@
   "type": "module",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "cloudinary": "^2.5.0",
     "connect-mongo": "^5.1.0",
     "cookie-parser": "^1.4.6",
     "cookie-session": "^2.1.0",
@@ -10,6 +11,7 @@
     "express": "^4.19.2",
     "express-session": "^1.18.0",
     "express-validator": "^7.0.1",
+    "formidable": "^3.5.1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.3.3",
     "multer": "^1.4.5-lts.1",

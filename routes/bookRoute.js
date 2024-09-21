@@ -5,6 +5,6 @@ import upload from '../middlewares/uploadImage.js';
 
 router.get("/", getBook);
 
-router.post("/", upload.single('image') , addBook);
+router.post("/", upload , addBook);
 
 export default router;
