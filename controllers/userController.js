@@ -173,7 +173,7 @@ export const addBook = async (req, res) => {
     }
 
     if (user.books.includes(bookId)) {
-      return res.status(400).json({ error: "Book bought" });
+      return res.status(400).json({ error: "Book already in user's cart" });
     }
 
     user.books.push(bookId);
@@ -184,6 +184,7 @@ export const addBook = async (req, res) => {
     return res.status(400).json({ error: err.message });
   }
 };
+<<<<<<< HEAD
 
 // Route to add a book to the user's cart
 export const addToCart =  async (req, res) => {
@@ -339,3 +340,5 @@ export const removeFromCart = async (req, res) => {
     return res.status(500).json({ error: "Server error", details: error.message });
   }
 };
+=======
+>>>>>>> d376623c636a76c2a79f4d002ccbbf94676380bd
