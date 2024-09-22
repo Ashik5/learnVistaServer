@@ -38,3 +38,17 @@ export const addBook = (req, res) => {
         res.status(400).json({ message: error.message });
     }
 }
+export const getBookById = (req, res) => {
+    const { id } = req.params;  // Extract the book ID from the URL parameters
+  
+    Book.findById(id)
+      .then((book) => {
+        if (!book) {
+          return res.status(404).json({ error: "Book not found" });
+        }
+        res.json(book);
+      })
+      .catch((err) => {
+        res.status(400).json({ error: "Error: " + err.message });
+      });
+  };

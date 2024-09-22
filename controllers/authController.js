@@ -43,23 +43,23 @@ export const login = async (req, res) => {
       return res.status(400).json({ error: "Wrong password" });
     }
 
+    // Generate tokens
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
 
-    // Set access token in httpOnly cookie
+    // Set the tokens as httpOnly cookies
     res.cookie("accessToken", accessToken, {
       maxAge: 15 * 60 * 1000, // 15 minutes
       httpOnly: true,
-      secure: true, // Use true in production
+      secure: true,  // use in production
       sameSite: "none",
       path: "/",
     });
 
-    // Set refresh token in httpOnly cookie
     res.cookie("refreshToken", refreshToken, {
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       httpOnly: true,
-      secure: true, // Use true in production
+      secure: true,  // use in production
       sameSite: "none",
       path: "/",
     });
@@ -70,16 +70,17 @@ export const login = async (req, res) => {
   }
 };
 
+
 export const logout = (req, res) => {
   res.clearCookie("accessToken", {
     httpOnly: true,
-    secure: true, // Use true in production
+    secure: true,
     sameSite: "none",
     path: "/",
   });
   res.clearCookie("refreshToken", {
     httpOnly: true,
-    secure: true, // Use true in production
+    secure: true,
     sameSite: "none",
     path: "/",
   });

@@ -190,20 +190,22 @@ export const addToCart =  async (req, res) => {
     if (!accessToken) {
       return res.status(401).json({ error: "Token is missing" });
     }
-
     const decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
     const userId = decoded.id;
-
     const { bookId } = req.body;
+    // Find the user
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
+    // Find the book
     const book = await Book.findById(bookId);
     if (!book) {
       return res.status(404).json({ message: 'Book not found' });
     }
+    // Add book to cart if it's not already in there
     if (!user.cart.includes(bookId)) {
+      console.log('Adding book to cart');
       user.cart.push(bookId);
       await user.save();
       return res.status(200).json({ message: 'Book added to cart', cart: user.cart });
