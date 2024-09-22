@@ -184,3 +184,120 @@ export const addBook = async (req, res) => {
     return res.status(400).json({ error: err.message });
   }
 };
+export const addToCart =  async (req, res) => {
+  try {
+    const { accessToken } = req.cookies;
+    if (!accessToken) {
+      return res.status(401).json({ error: "Token is missing" });
+    }
+
+    const decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
+    const userId = decoded.id;
+
+    const { bookId } = req.body;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    const book = await Book.findById(bookId);
+    if (!book) {
+      return res.status(404).json({ message: 'Book not found' });
+    }
+    if (!user.cart.includes(bookId)) {
+      user.cart.push(bookId);
+      await user.save();
+      return res.status(200).json({ message: 'Book added to cart', cart: user.cart });
+    } else {
+      return res.status(400).json({ message: 'Book already in cart' });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: 'Server error', error });
+  }
+};
+export const getCart = async (req, res) => {
+  try {
+    const { accessToken } = req.cookies;
+    if (!accessToken) {
+      return res.status(401).json({ error: "Authentication token is missing" });
+    }
+    let decoded;
+    try {
+      decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
+    } catch (err) {
+      return res.status(401).json({ error: "Invalid authentication token" });
+    }
+
+    const userId = decoded.id;
+
+    // Find the user by ID and populate the cart with book details
+    const user = await User.findById(userId)
+
+    // If user is not found, return 404
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    if (!user.cart || user.cart.length === 0) {
+      return res.status(200).json({ cart: [] });
+    }
+    const cartItems = user.cart.map(book => ({
+      id: book._id,
+      title: book.title,
+      price: book.price,
+      imageUrl: book.imageUrl,
+      genre: book.genre,
+      rating: book.rating,
+      inStock: book.inStock,
+    }));
+    return res.status(200).json({ cart: cartItems });
+  } catch (error) {
+    console.error("Error fetching cart:", error);
+    return res.status(500).json({ error: "Server error" });
+  }
+};
+export const removeFromCart = async (req, res) => {
+  try {
+    const { accessToken } = req.cookies;
+    if (!accessToken) {
+      return res.status(401).json({ error: "Authentication token is missing" });
+    }
+    let decoded;
+    try {
+      decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
+    } catch (err) {
+      return res.status(401).json({ error: "Invalid authentication token" });
+    }
+
+    const userId = decoded.id;
+    const { bookId } = req.body;
+
+    if (!bookId) {
+      return res.status(400).json({ error: "Book ID is required" });
+    }
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    if (!user.cart.includes(bookId)) {
+      return res.status(400).json({ error: "Book is not in the cart" });
+    }
+    user.cart = user.cart.filter(id => id.toString() !== bookId);
+    await user.save();
+
+    // Transform the cart items if necessary
+    const cartItems = user.cart.map(book => ({
+      id: book._id,
+      title: book.title,
+      price: book.price,
+      imageUrl: book.imageUrl,
+      genre: book.genre,
+      rating: book.rating,
+      inStock: book.inStock,
+    }));
+
+    return res.status(200).json({ message: "Book removed from cart", cart: cartItems });
+  } catch (error) {
+    console.error("Error removing from cart:", error);
+    return res.status(500).json({ error: "Server error", details: error.message });
+  }
+};
