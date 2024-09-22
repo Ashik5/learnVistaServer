@@ -242,7 +242,7 @@ export const getCart = async (req, res) => {
     const userId = decoded.id;
 
     // Find the user by ID and populate the cart with book details
-    const user = await User.findById(userId).populate('cart');
+    const user = await User.findById(userId)
 
     // If user is not found, return 404
     if (!user) {
@@ -320,9 +320,6 @@ export const removeFromCart = async (req, res) => {
 
     // Save the updated user document
     await user.save();
-
-    // Optionally, populate the cart to return detailed book information
-    await user.populate('cart');
 
     // Transform the cart items if necessary
     const cartItems = user.cart.map(book => ({
