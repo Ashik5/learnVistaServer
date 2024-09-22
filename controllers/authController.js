@@ -73,13 +73,13 @@ export const login = async (req, res) => {
 export const logout = (req, res) => {
   res.clearCookie("accessToken", {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production', // Use true in production
+    secure: true, // Use true in production
     sameSite: "none",
     path: "/",
   });
   res.clearCookie("refreshToken", {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production', // Use true in production
+    secure: true, // Use true in production
     sameSite: "none",
     path: "/",
   });
