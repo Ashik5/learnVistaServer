@@ -185,7 +185,10 @@ export const addBook = async (req, res) => {
   }
 };
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7a027d848b100ab3a0471ef2efbeaa036d5de62e
 // Route to add a book to the user's cart
 export const addToCart =  async (req, res) => {
   try {
@@ -198,19 +201,14 @@ export const addToCart =  async (req, res) => {
     const userId = decoded.id;
 
     const { bookId } = req.body;
-    // Find the user
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-
-    // Find the book
     const book = await Book.findById(bookId);
     if (!book) {
       return res.status(404).json({ message: 'Book not found' });
     }
-
-    // Add book to cart if it's not already in there
     if (!user.cart.includes(bookId)) {
       user.cart.push(bookId);
       await user.save();
@@ -224,15 +222,10 @@ export const addToCart =  async (req, res) => {
 };
 export const getCart = async (req, res) => {
   try {
-    // Extract accessToken from cookies
     const { accessToken } = req.cookies;
-
-    // If no token is provided, return 401 Unauthorized
     if (!accessToken) {
       return res.status(401).json({ error: "Authentication token is missing" });
     }
-
-    // Verify the token
     let decoded;
     try {
       decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
@@ -241,33 +234,30 @@ export const getCart = async (req, res) => {
     }
 
     const userId = decoded.id;
+<<<<<<< HEAD
 
     // Find the user by ID and populate the cart with book details
     const user = await User.findById(userId)
 
     // If user is not found, return 404
+=======
+    const user = await User.findById(userId).populate('cart');
+>>>>>>> 7a027d848b100ab3a0471ef2efbeaa036d5de62e
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
-
-    // If the cart is empty, return an empty array
     if (!user.cart || user.cart.length === 0) {
       return res.status(200).json({ cart: [] });
     }
-
-    // Transform the cart items to include necessary fields
     const cartItems = user.cart.map(book => ({
       id: book._id,
       title: book.title,
       price: book.price,
       imageUrl: book.imageUrl,
-      genre: book.genre, // Assuming 'genre' is the correct field name
+      genre: book.genre,
       rating: book.rating,
       inStock: book.inStock,
-      // Add other relevant fields as needed
     }));
-
-    // Return the populated cart
     return res.status(200).json({ cart: cartItems });
   } catch (error) {
     console.error("Error fetching cart:", error);
@@ -276,15 +266,10 @@ export const getCart = async (req, res) => {
 };
 export const removeFromCart = async (req, res) => {
   try {
-    // Extract accessToken from cookies
     const { accessToken } = req.cookies;
-
-    // If no token is provided, return 401 Unauthorized
     if (!accessToken) {
       return res.status(401).json({ error: "Authentication token is missing" });
     }
-
-    // Verify the token
     let decoded;
     try {
       decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
@@ -293,45 +278,35 @@ export const removeFromCart = async (req, res) => {
     }
 
     const userId = decoded.id;
-
-    // Extract bookId from request body
     const { bookId } = req.body;
 
     if (!bookId) {
       return res.status(400).json({ error: "Book ID is required" });
     }
-
-    // Find the user by ID
     const user = await User.findById(userId);
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
-
-    // Check if the book exists in the user's cart
     if (!user.cart.includes(bookId)) {
       return res.status(400).json({ error: "Book is not in the cart" });
     }
-
-    // Option 1: Using JavaScript to filter out the bookId
     user.cart = user.cart.filter(id => id.toString() !== bookId);
-
-    // Option 2: Using Mongoose's $pull operator (Uncomment if preferred)
-    // await User.findByIdAndUpdate(userId, { $pull: { cart: bookId } }, { new: true });
-
-    // Save the updated user document
     await user.save();
+<<<<<<< HEAD
 
     // Transform the cart items if necessary
+=======
+    await user.populate('cart');
+>>>>>>> 7a027d848b100ab3a0471ef2efbeaa036d5de62e
     const cartItems = user.cart.map(book => ({
       id: book._id,
       title: book.title,
       price: book.price,
       imageUrl: book.imageUrl,
-      genre: book.genre, // Ensure this matches your schema
+      genre: book.genre,
       rating: book.rating,
       inStock: book.inStock,
-      // Add other relevant fields as needed
     }));
 
     return res.status(200).json({ message: "Book removed from cart", cart: cartItems });
@@ -340,5 +315,8 @@ export const removeFromCart = async (req, res) => {
     return res.status(500).json({ error: "Server error", details: error.message });
   }
 };
+<<<<<<< HEAD
 =======
 >>>>>>> d376623c636a76c2a79f4d002ccbbf94676380bd
+=======
+>>>>>>> 7a027d848b100ab3a0471ef2efbeaa036d5de62e
