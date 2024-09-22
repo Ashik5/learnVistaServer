@@ -184,12 +184,6 @@ export const addBook = async (req, res) => {
     return res.status(400).json({ error: err.message });
   }
 };
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> 7a027d848b100ab3a0471ef2efbeaa036d5de62e
-// Route to add a book to the user's cart
 export const addToCart =  async (req, res) => {
   try {
     const { accessToken } = req.cookies;
@@ -234,15 +228,11 @@ export const getCart = async (req, res) => {
     }
 
     const userId = decoded.id;
-<<<<<<< HEAD
 
     // Find the user by ID and populate the cart with book details
     const user = await User.findById(userId)
 
     // If user is not found, return 404
-=======
-    const user = await User.findById(userId).populate('cart');
->>>>>>> 7a027d848b100ab3a0471ef2efbeaa036d5de62e
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -293,12 +283,8 @@ export const removeFromCart = async (req, res) => {
     }
     user.cart = user.cart.filter(id => id.toString() !== bookId);
     await user.save();
-<<<<<<< HEAD
 
     // Transform the cart items if necessary
-=======
-    await user.populate('cart');
->>>>>>> 7a027d848b100ab3a0471ef2efbeaa036d5de62e
     const cartItems = user.cart.map(book => ({
       id: book._id,
       title: book.title,
@@ -315,8 +301,3 @@ export const removeFromCart = async (req, res) => {
     return res.status(500).json({ error: "Server error", details: error.message });
   }
 };
-<<<<<<< HEAD
-=======
->>>>>>> d376623c636a76c2a79f4d002ccbbf94676380bd
-=======
->>>>>>> 7a027d848b100ab3a0471ef2efbeaa036d5de62e
